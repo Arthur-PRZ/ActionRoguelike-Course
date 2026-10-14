@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ExplosiveBarrel.h"
-#include "MagicProjectile.h"
+#include "TExplosiveBarrel.h"
+#include "TMagicProjectile.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 
 // Sets default values
-AExplosiveBarrel::AExplosiveBarrel()
+ATExplosiveBarrel::ATExplosiveBarrel()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -14,7 +14,7 @@ AExplosiveBarrel::AExplosiveBarrel()
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	RootComponent = MeshComp;
 	
-	MeshComp->OnComponentHit.AddDynamic(this, &AExplosiveBarrel::Explose);
+	MeshComp->OnComponentHit.AddDynamic(this, &ATExplosiveBarrel::Explose);
 	MeshComp->SetCollisionProfileName(TEXT("Barrel"));
 	MeshComp->SetSimulatePhysics(true);
 	
@@ -27,11 +27,11 @@ AExplosiveBarrel::AExplosiveBarrel()
 	RadialForceComp->AddCollisionChannelToAffect(ECC_PhysicsBody);
 }
 
-void AExplosiveBarrel::Explose(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ATExplosiveBarrel::Explose(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor)
 	{
-		if (AMagicProjectile* Projectile = Cast<AMagicProjectile>(OtherActor))
+		if (ATMagicProjectile* Projectile = Cast<ATMagicProjectile>(OtherActor))
 		{
 			RadialForceComp->FireImpulse();
 			OtherActor->Destroy();
@@ -41,14 +41,14 @@ void AExplosiveBarrel::Explose(UPrimitiveComponent* HitComp, AActor* OtherActor,
 }
 
 // Called when the game starts or when spawned
-void AExplosiveBarrel::BeginPlay()
+void ATExplosiveBarrel::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AExplosiveBarrel::Tick(float DeltaTime)
+void ATExplosiveBarrel::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	

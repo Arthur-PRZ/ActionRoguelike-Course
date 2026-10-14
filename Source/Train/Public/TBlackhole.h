@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Projectile.h"
+#include "TProjectile.h"
 #include "GameFramework/Actor.h"
 #include "TBlackhole.generated.h"
 
@@ -13,7 +13,7 @@ class URadialForceComponent;
 class UParticleSystemComponent;
 
 UCLASS()
-class TRAIN_API ATBlackhole : public AProjectile
+class TRAIN_API ATBlackhole : public ATProjectile
 {
 	GENERATED_BODY()
 	

@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ExplosiveBarrel.generated.h"
+#include "TExplosiveBarrel.generated.h"
 
 class URadialForceComponent;
 
 UCLASS()
-class TRAIN_API AExplosiveBarrel : public AActor
+class TRAIN_API ATExplosiveBarrel : public AActor
 {
 	GENERATED_BODY()
 	
 public:
 	// Sets default values for this actor's properties
-	AExplosiveBarrel();
+	ATExplosiveBarrel();
 
 protected:
 	// Called when the game starts or when spawned

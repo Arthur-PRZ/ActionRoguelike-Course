@@ -3,23 +3,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Projectile.h"
+#include "TProjectile.h"
 #include "GameFramework/Actor.h"
-#include "MagicProjectile.generated.h"
+#include "TDash.generated.h"
 
 UCLASS()
-class TRAIN_API AMagicProjectile : public AProjectile
+class TRAIN_API ATDash : public ATProjectile
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMagicProjectile();
+	ATDash();
 
-protected:
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* ProcParticleComp;
 	
+protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+
 
 public:	
 	// Called every frame

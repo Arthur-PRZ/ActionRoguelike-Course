@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Projectile.h"
+#include "TProjectile.h"
 
 
 // Sets default values
-AProjectile::AProjectile()
+ATProjectile::ATProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -19,20 +19,20 @@ AProjectile::AProjectile()
 	ParticleComp->SetupAttachment(SphereComp);
 }
 
-void AProjectile::StopMovementComp() const
+void ATProjectile::StopMovementComp() const
 {
 	MovementComp->StopMovementImmediately();
 }
 
 // Called when the game starts or when spawned
-void AProjectile::BeginPlay()
+void ATProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AProjectile::Tick(float DeltaTime)
+void ATProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

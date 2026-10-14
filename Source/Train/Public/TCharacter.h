@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "TrainCharacter.generated.h"
+#include "TCharacter.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
@@ -15,7 +15,7 @@ class UTInteractionComponent;
 class UAnimeMontage;
 
 UCLASS()
-class TRAIN_API ATrainCharacter : public ACharacter
+class TRAIN_API ATCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -40,7 +40,7 @@ protected:
 	
 public:
 	// Sets default values for this character's properties
-	ATrainCharacter();
+	ATCharacter();
 
 protected:
 	// Called when the game starts or when spawned
@@ -89,10 +89,10 @@ protected:
 	void Dash_TimeElapsed();
 	
 	UFUNCTION()
-	void DashStop_TimeElapsed(ADash *Actor);
+	void DashStop_TimeElapsed(ATDash *Actor);
 	
 	UFUNCTION()
-	void DashTP_TimeElapsed(ADash* Actor);
+	void DashTP_TimeElapsed(ATDash* Actor);
 	
 	void Move(const FInputActionValue& EventValue);
 	void Look(const FInputActionValue& EventValue);

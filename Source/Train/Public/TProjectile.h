@@ -7,17 +7,17 @@
 #include "Components/SphereComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/Actor.h"
-#include "Projectile.generated.h"
+#include "TProjectile.generated.h"
 
 
 UCLASS()
-class TRAIN_API AProjectile : public AActor
+class TRAIN_API ATProjectile : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AProjectile();
+	ATProjectile();
 	
 	void StopMovementComp() const;
 

@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Dash.h"
+#include "TDash.h"
 
-#include "TrainCharacter.h"
+#include "TCharacter.h"
 
 // Sets default values
-ADash::ADash()
+ATDash::ATDash()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -25,7 +25,7 @@ ADash::ADash()
 }
 
 // Called when the game starts or when spawned
-void ADash::BeginPlay()
+void ATDash::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -34,7 +34,7 @@ void ADash::BeginPlay()
 }
 
 // Called every frame
-void ADash::Tick(float DeltaTime)
+void ATDash::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

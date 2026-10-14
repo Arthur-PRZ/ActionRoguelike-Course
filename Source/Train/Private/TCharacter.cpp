@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TrainCharacter.h"
+#include "TCharacter.h"
 
-#include "Dash.h"
+#include "TDash.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
@@ -13,7 +13,7 @@
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
-ATrainCharacter::ATrainCharacter()
+ATCharacter::ATCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -33,7 +33,7 @@ ATrainCharacter::ATrainCharacter()
 }
 
 // Called when the game starts or when spawned
-void ATrainCharacter::BeginPlay()
+void ATCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -51,32 +51,35 @@ void ATrainCharacter::BeginPlay()
 	}
 }
 
-void ATrainCharacter::PrimaryAttack()
+void ATCharacter::PrimaryAttack()
 {
 	PlayAnimMontage(AttackAnim);
 	
-	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ATrainCharacter::PrimaryAttack_TimeElapsed, 0.2f);
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ATCharacter::PrimaryAttack_TimeElapsed, 0.2f);
 }
 
-void ATrainCharacter::PrimaryAttack_TimeElapsed()
+void ATCharacter::PrimaryAttack_TimeElapsed()
 {
-	FTransform SpawnTM = GetSpawnTM();
+	if (ensureAlways(ProjectileClass))
+	{
+		FTransform SpawnTM = GetSpawnTM();
 
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-	
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = this;
+		
+		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	}
 }
 
-void ATrainCharacter::Blackhole()
+void ATCharacter::Blackhole()
 {
 	PlayAnimMontage(AttackAnim);
 	
-	GetWorldTimerManager().SetTimer(TimerHandle_Blackhole, this, &ATrainCharacter::Blackhole_TimeElapsed, 0.2f);
+	GetWorldTimerManager().SetTimer(TimerHandle_Blackhole, this, &ATCharacter::Blackhole_TimeElapsed, 0.2f);
 }
 
-void ATrainCharacter::Blackhole_TimeElapsed()
+void ATCharacter::Blackhole_TimeElapsed()
 {
 	FTransform SpawnTM = GetSpawnTM();
 	FActorSpawnParameters SpawnParams;
@@ -85,20 +88,20 @@ void ATrainCharacter::Blackhole_TimeElapsed()
 	GetWorld()->SpawnActor<AActor>(BlackholeClass, SpawnTM, SpawnParams);
 }
 
-void ATrainCharacter::Dash()
+void ATCharacter::Dash()
 {
 	PlayAnimMontage(AttackAnim);
 	
-	GetWorldTimerManager().SetTimer(Timerhandle_Dash, this, &ATrainCharacter::Dash_TimeElapsed, 0.2f);
+	GetWorldTimerManager().SetTimer(Timerhandle_Dash, this, &ATCharacter::Dash_TimeElapsed, 0.2f);
 }
 
-void ATrainCharacter::Dash_TimeElapsed()
+void ATCharacter::Dash_TimeElapsed()
 {
 	FTransform SpawnTM = GetSpawnTM();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = this;
 	
-	ADash* SpawnedActor = GetWorld()->SpawnActor<ADash>(DashClass, SpawnTM, SpawnParams);
+	ATDash* SpawnedActor = GetWorld()->SpawnActor<ATDash>(DashClass, SpawnTM, SpawnParams);
 	
 	// SpawnedActor->GetMovementComp()->OnProjectileStop
 	
@@ -108,7 +111,7 @@ void ATrainCharacter::Dash_TimeElapsed()
 	GetWorldTimerManager().SetTimer(Timerhandle_Dash, TimerDelegate, 0.2f, false);
 }
 
-void ATrainCharacter::DashStop_TimeElapsed(ADash* Actor)
+void ATCharacter::DashStop_TimeElapsed(ATDash* Actor)
 {
 	Actor->StopMovementComp();
 	
@@ -119,18 +122,18 @@ void ATrainCharacter::DashStop_TimeElapsed(ADash* Actor)
 	GetWorldTimerManager().SetTimer(Timerhandle_Dash, TimerDelegate, 0.2f, false);
 }
 
-void ATrainCharacter::DashTP_TimeElapsed(ADash* Actor)
+void ATCharacter::DashTP_TimeElapsed(ATDash* Actor)
 {
 	SetActorLocation(Actor->GetActorLocation());
 	Actor->Destroy();
 }
 
-void ATrainCharacter::Jump()
+void ATCharacter::Jump()
 {
 	Super::Jump();
 }
 
-void ATrainCharacter::Move(const FInputActionValue& EventValue)
+void ATCharacter::Move(const FInputActionValue& EventValue)
 {
 	FVector2D MovementVector = EventValue.Get<FVector2D>();
 	
@@ -145,7 +148,7 @@ void ATrainCharacter::Move(const FInputActionValue& EventValue)
 	}
 }
 
-void ATrainCharacter::Look(const FInputActionValue& EventValue)
+void ATCharacter::Look(const FInputActionValue& EventValue)
 {
 	FVector2D MovementVector = EventValue.Get<FVector2D>();
 	
@@ -160,12 +163,12 @@ void ATrainCharacter::Look(const FInputActionValue& EventValue)
 
 
 
-void ATrainCharacter::Interact()
+void ATCharacter::Interact()
 {
 	InteractComp->PrimaryInteract();
 }
 
-FTransform ATrainCharacter::GetSpawnTM()
+FTransform ATCharacter::GetSpawnTM()
 {
 	FHitResult Hit;
 	FVector Start = GetMesh()->GetSocketLocation("Muzzle_01");
@@ -186,26 +189,26 @@ FTransform ATrainCharacter::GetSpawnTM()
 
 
 // Called every frame
-void ATrainCharacter::Tick(float DeltaTime)
+void ATCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void ATrainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ATCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATrainCharacter::Move);
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATrainCharacter::Look);
-		EnhancedInputComponent->BindAction(PrimaryAttackAction, ETriggerEvent::Started, this, &ATrainCharacter::PrimaryAttack);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ATrainCharacter::Jump);
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &ATrainCharacter::Interact);
-		EnhancedInputComponent->BindAction(BlackholeAction, ETriggerEvent::Started, this, &ATrainCharacter::Blackhole);
-		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ATrainCharacter::Dash);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATCharacter::Move);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATCharacter::Look);
+		EnhancedInputComponent->BindAction(PrimaryAttackAction, ETriggerEvent::Started, this, &ATCharacter::PrimaryAttack);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ATCharacter::Jump);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &ATCharacter::Interact);
+		EnhancedInputComponent->BindAction(BlackholeAction, ETriggerEvent::Started, this, &ATCharacter::Blackhole);
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ATCharacter::Dash);
 	}
 }
 
