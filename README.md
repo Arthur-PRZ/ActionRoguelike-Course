@@ -22,22 +22,22 @@ I covered the fundamentals of Unreal Engine:
 ### Enhanced Input System
 Handled player movement and actions using **Input Actions** and an **Input Mapping Context**, bound in C++ with `BindAction()`.
 
-![Player movement](docs/movement.gif)
+![Player movement](Docs/movement.gif)
 
 ### Collision System
-Created custom **Collision Channels** and defined how my classes respond to them, using `SetCollisionProfileName()`, `SetCollisionResponseToChannel()` and `SetCollisionResponseToAllChannels()`. I used it to build the black hole mechanic.
+Created custom **Collision Channels** and defined how my classes respond to them, using `SetCollisionProfileName()`/`SetCollisionEnabled()`, `SetCollisionResponseToChannel()`/`SetCollisionResponseToAllChannels()`. I used it to build the black hole for example.
 
-![Black hole](docs/black_hole.gif)
+![Black hole](Docs/black_hole.gif)
 
 ### Traces & math structs
 I used Unreal's trace functions with `FVector` and `FRotator`:
 - **`SweepMultiByObjectType()`** — detects the chest in front of the player so they can open it.
 
-  ![Chest](docs/chest.gif)
+![Chest](Docs/chest.gif)
 
 - **`LineTraceSingleByChannel()`** with **`UKismetMathLibrary::FindLookAtRotation()`** — finds the aimed point, then computes the rotation to give projectiles the right trajectory.
 
- ![Projectile](docs/projectile.gif)
+![Projectile](Docs/projectile.gif)
 
 This project is not finished i'm still working on it.
 
