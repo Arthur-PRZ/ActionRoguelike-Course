@@ -13,16 +13,15 @@ class TRAIN_API UTAttributeComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UTAttributeComponent();
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	
+	UPROPERTY(VisibleAnywhere, Category = "Attribute")
+	float Health;
+	
+public:
+	
+	void ApplyHealthChange(float Delta);
 		
 };

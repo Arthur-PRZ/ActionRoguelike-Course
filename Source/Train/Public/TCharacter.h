@@ -13,6 +13,7 @@ class UInputMappingContext;
 class UInputAction;
 class UTInteractionComponent;
 class UAnimeMontage;
+class UTAttributeComponent;
 
 UCLASS()
 class TRAIN_API ATCharacter : public ACharacter
@@ -52,6 +53,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* ArmComp;
 	
+	UPROPERTY(VisibleAnywhere)
+	UTAttributeComponent* AttributeComp;
+	
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputMappingContext* DefaultMappingContext;
 	
@@ -71,11 +75,13 @@ protected:
 	UInputAction* JumpAction;
 	
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* InteractAction;
-	
-	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* DashAction;
 	
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* InteractAction;
+	
+	
+
 	UPROPERTY(VisibleAnywhere)
 	UTInteractionComponent* InteractComp;
 
@@ -105,5 +111,4 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };

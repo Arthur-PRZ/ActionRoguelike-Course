@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "TAttributeComponent.h"
 #include "TInteractionComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -30,6 +31,7 @@ ATCharacter::ATCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	InteractComp = CreateDefaultSubobject<UTInteractionComponent>("InteractComp");
+	AttributeComp = CreateDefaultSubobject<UTAttributeComponent>("AttributeComp");
 }
 
 // Called when the game starts or when spawned
