@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "TAttributeComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnHealthChanged, AActor*, InstigatorActor, UTAttributeComponent*, OwningComp , float, NewHealth, float, Delta);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TRAIN_API UTAttributeComponent : public UActorComponent
@@ -21,6 +22,8 @@ protected:
 	float Health;
 	
 public:
+	
+	FOnHealthChanged OnHealthChanged;
 	
 	void ApplyHealthChange(float Delta);
 		

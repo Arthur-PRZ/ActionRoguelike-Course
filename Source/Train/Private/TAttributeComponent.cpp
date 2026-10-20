@@ -4,16 +4,16 @@
 #include "TAttributeComponent.h"
 
 // Sets default values for this component's properties
-UTAttributeComponent::UTAttributeComponent()
+UTAttributeComponent::UTAttributeComponent() : Health(100)
 {
-	Health = 100;
 }
 
 
 void UTAttributeComponent::ApplyHealthChange(float Delta)
 {
 	Health += Delta;
-	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+	
+	OnHealthChanged.Broadcast(nullptr, this, Health, Delta);
 }
 
 

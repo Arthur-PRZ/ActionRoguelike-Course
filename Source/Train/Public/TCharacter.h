@@ -14,6 +14,7 @@ class UInputAction;
 class UTInteractionComponent;
 class UAnimeMontage;
 class UTAttributeComponent;
+class UTUserWidget;
 
 UCLASS()
 class TRAIN_API ATCharacter : public ACharacter
@@ -22,14 +23,17 @@ class TRAIN_API ATCharacter : public ACharacter
 
 protected:
 	
-	UPROPERTY(EditAnywhere, Category = "Attack")
+	UPROPERTY(EditDefaultsOnly, Category = "Attack")
 	TSubclassOf<AActor> ProjectileClass;
 	
-	UPROPERTY(EditAnywhere, Category = "Attack")
+	UPROPERTY(EditDefaultsOnly, Category = "Attack")
 	TSubclassOf<AActor> BlackholeClass;
 	
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> DashClass;	
+	UPROPERTY(EditDefaultsOnly, Category = "Attack")
+	TSubclassOf<AActor> DashClass;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UTUserWidget> UserWidgetClass;
 	
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	UAnimMontage* AttackAnim;
@@ -99,6 +103,9 @@ protected:
 	
 	UFUNCTION()
 	void DashTP_TimeElapsed(ATDash* Actor);
+	
+	UFUNCTION()
+	void OnHealthChanged(AActor* InstigatorActor, UTAttributeComponent* OwningComp , float NewHealth, float Delta);
 	
 	void Move(const FInputActionValue& EventValue);
 	void Look(const FInputActionValue& EventValue);

@@ -12,6 +12,7 @@
 #include "TInteractionComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "TUserWidget.h"
 
 // Sets default values
 ATCharacter::ATCharacter()
@@ -39,7 +40,8 @@ void ATCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	APlayerController* PC = Cast<APlayerController>(Controller);
+	if (PC)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
 		{
@@ -51,6 +53,20 @@ void ATCharacter::BeginPlay()
 		PC->bShowMouseCursor = false;
 		PC->SetInputMode(FInputModeGameOnly());
 	}
+	
+	UTUserWidget *UserWidget = CreateWidget<UTUserWidget>(PC, UserWidgetClass);
+	if (UserWidget)
+	{
+		UserWidget->BindToAttributes(AttributeComp);
+		UserWidget->AddToViewport();
+		AttributeComp->OnHealthChanged.AddDynamic(this, &ATCharacter::OnHealthChanged);
+	}
+	
+}
+
+void ATCharacter::OnHealthChanged(AActor* InstigatorActor, UTAttributeComponent* OwningComp , float NewHealth, float Delta)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), NewHealth);
 }
 
 void ATCharacter::PrimaryAttack()

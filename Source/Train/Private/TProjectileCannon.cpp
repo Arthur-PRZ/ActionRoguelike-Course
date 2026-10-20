@@ -26,8 +26,6 @@ void ATProjectileCannon::BeginPlay()
 
 void ATProjectileCannon::Shoot_TimeElapsed()
 {
-	UE_LOG(LogTemp, Warning, TEXT("OUI"));
-	
 	FActorSpawnParameters SpawnInfo;
 	
 	ACharacter* Player = UGameplayStatics::GetPlayerCharacter(this, 0);
