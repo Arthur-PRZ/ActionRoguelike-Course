@@ -4,7 +4,7 @@
 #include "TMagicProjectile.h"
 
 #include "TAttributeComponent.h"
-
+#include "TCharacter.h"
 
 // Sets default values
 ATMagicProjectile::ATMagicProjectile()
@@ -21,7 +21,7 @@ ATMagicProjectile::ATMagicProjectile()
 
 void ATMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	if (OtherActor)
+	if (OtherActor && OtherActor != GetInstigator())
 	{
 		UTAttributeComponent* AttributeComp = Cast<UTAttributeComponent>(OtherActor->GetComponentByClass(UTAttributeComponent::StaticClass()));
 		if (AttributeComp)
