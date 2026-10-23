@@ -14,7 +14,6 @@ class UInputAction;
 class UTInteractionComponent;
 class UAnimeMontage;
 class UTAttributeComponent;
-class UTUserWidget;
 
 UCLASS()
 class TRAIN_API ATCharacter : public ACharacter
@@ -31,9 +30,6 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Attack")
 	TSubclassOf<AActor> DashClass;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UTUserWidget> UserWidgetClass;
 	
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	UAnimMontage* AttackAnim;
@@ -57,7 +53,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* ArmComp;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UTAttributeComponent* AttributeComp;
 	
 	UPROPERTY(EditAnywhere, Category = "Input")

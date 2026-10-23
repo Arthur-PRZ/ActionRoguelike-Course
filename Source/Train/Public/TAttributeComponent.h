@@ -18,11 +18,12 @@ public:
 
 protected:
 	
-	UPROPERTY(VisibleAnywhere, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attribute")
 	float Health;
 	
 public:
 	
+	UPROPERTY(BlueprintAssignable)
 	FOnHealthChanged OnHealthChanged;
 	
 	void ApplyHealthChange(float Delta);

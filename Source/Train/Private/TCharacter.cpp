@@ -12,7 +12,6 @@
 #include "TInteractionComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "TUserWidget.h"
 
 // Sets default values
 ATCharacter::ATCharacter()
@@ -52,14 +51,6 @@ void ATCharacter::BeginPlay()
 		
 		PC->bShowMouseCursor = false;
 		PC->SetInputMode(FInputModeGameOnly());
-	}
-	
-	UTUserWidget *UserWidget = CreateWidget<UTUserWidget>(PC, UserWidgetClass);
-	if (UserWidget)
-	{
-		UserWidget->BindToAttributes(AttributeComp);
-		UserWidget->AddToViewport();
-		AttributeComp->OnHealthChanged.AddDynamic(this, &ATCharacter::OnHealthChanged);
 	}
 	
 }
