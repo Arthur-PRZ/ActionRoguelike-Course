@@ -2,8 +2,12 @@
 
 
 #include "TExplosiveBarrel.h"
+
+#include "TCharacter.h"
 #include "TMagicProjectile.h"
+#include "Engine/OverlapResult.h"
 #include "PhysicsEngine/RadialForceComponent.h"
+#include "TAttributeComponent.h"
 
 // Sets default values
 ATExplosiveBarrel::ATExplosiveBarrel()
@@ -34,6 +38,28 @@ void ATExplosiveBarrel::Explose(UPrimitiveComponent* HitComp, AActor* OtherActor
 		if (ATMagicProjectile* Projectile = Cast<ATMagicProjectile>(OtherActor))
 		{
 			RadialForceComp->FireImpulse();
+			
+			FCollisionObjectQueryParams QueryParams;
+			QueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
+			
+			TArray<struct FOverlapResult> Overlaps;
+			GetWorld()->OverlapMultiByObjectType(Overlaps, GetActorLocation(), FQuat::Identity, QueryParams,FCollisionShape::MakeSphere(RadialForceComp->Radius));
+			
+			if (!Overlaps.IsEmpty())
+			{
+				for (FOverlapResult &Overlap : Overlaps)
+				{
+					if (ATCharacter *Character = Cast<ATCharacter>(Overlap.GetActor()))
+					{
+						if (UTAttributeComponent *Comp = Character->GetComponentByClass<UTAttributeComponent>())
+						{
+							Comp->ApplyHealthChange(-50);
+							break ;
+						}
+					}
+				}
+			}
+			
 			OtherActor->Destroy();
 			Destroy();
 		}
