@@ -31,7 +31,9 @@ ATCharacter::ATCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	InteractComp = CreateDefaultSubobject<UTInteractionComponent>("InteractComp");
+	
 	AttributeComp = CreateDefaultSubobject<UTAttributeComponent>("AttributeComp");
+	AttributeComp->OnHealthChanged.AddDynamic(this, &ATCharacter::OnHealthChanged);
 }
 
 // Called when the game starts or when spawned
@@ -55,7 +57,7 @@ void ATCharacter::BeginPlay()
 	
 }
 
-void ATCharacter::OnHealthChanged(AActor* InstigatorActor, UTAttributeComponent* OwningComp , float NewHealth, float Delta)
+void ATCharacter::OnHealthChanged(AActor* InstigatorActor, UTAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), NewHealth);
 }

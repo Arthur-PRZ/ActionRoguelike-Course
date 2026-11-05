@@ -80,7 +80,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* InteractAction;
 	
-	
 
 	UPROPERTY(VisibleAnywhere)
 	UTInteractionComponent* InteractComp;
@@ -101,7 +100,7 @@ protected:
 	void DashTP_TimeElapsed(ATDash* Actor);
 	
 	UFUNCTION()
-	void OnHealthChanged(AActor* InstigatorActor, UTAttributeComponent* OwningComp , float NewHealth, float Delta);
+	void OnHealthChanged(AActor* InstigatorActor, UTAttributeComponent* OwningComp, float NewHealth, float Delta);
 	
 	void Move(const FInputActionValue& EventValue);
 	void Look(const FInputActionValue& EventValue);

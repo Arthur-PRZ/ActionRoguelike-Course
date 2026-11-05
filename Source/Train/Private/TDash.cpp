@@ -11,9 +11,8 @@ ATDash::ATDash()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	ProcParticleComp = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ProcParticleComp"));
+	ProcParticleComp = CreateDefaultSubobject<UParticleSystemComponent>("ProcParticleComp");
 	ProcParticleComp->SetupAttachment(RootComponent);
-
 	
 	SphereComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereComp->SetCollisionResponseToAllChannels(ECR_Block);

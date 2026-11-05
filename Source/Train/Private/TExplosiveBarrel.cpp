@@ -13,7 +13,7 @@
 ATExplosiveBarrel::ATExplosiveBarrel()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	RootComponent = MeshComp;
@@ -73,10 +73,5 @@ void ATExplosiveBarrel::BeginPlay()
 	
 }
 
-// Called every frame
-void ATExplosiveBarrel::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	
-}
+
 
