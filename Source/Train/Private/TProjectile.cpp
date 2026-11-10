@@ -3,17 +3,24 @@
 
 #include "TProjectile.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "UObject/FastReferenceCollector.h"
+
 
 // Sets default values
 ATProjectile::ATProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
+	SphereComp->SetCollisionProfileName("Projectile");
+	SphereComp->OnComponentHit.AddDynamic(this, &ATProjectile::OnActorHit);
 	RootComponent = SphereComp;
 	
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("Movement");
+	MovementComp->bRotationFollowsVelocity = true;
+	MovementComp->bInitialVelocityInLocalSpace = true;
+	MovementComp->InitialSpeed = 8000.0f;
+	MovementComp->ProjectileGravityScale = 0.0f;
+	
 	
 	ParticleComp = CreateDefaultSubobject<UParticleSystemComponent>("ParticleComp");
 	ParticleComp->SetupAttachment(SphereComp);
@@ -24,17 +31,20 @@ void ATProjectile::StopMovementComp() const
 	MovementComp->StopMovementImmediately();
 }
 
-// Called when the game starts or when spawned
-void ATProjectile::BeginPlay()
+void ATProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	Super::BeginPlay();
-	
+	Explode();
 }
 
-// Called every frame
-void ATProjectile::Tick(float DeltaTime)
+void ATProjectile::Explode()
 {
-	Super::Tick(DeltaTime);
-
+	if (ensure(IsValid(this)))
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
+		
+		Destroy();
+	}
 }
+
+
 

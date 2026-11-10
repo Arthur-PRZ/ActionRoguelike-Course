@@ -10,32 +10,37 @@
 #include "TProjectile.generated.h"
 
 
-UCLASS()
+UCLASS(ABSTRACT)
 class TRAIN_API ATProjectile : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
-	ATProjectile();
-	
-	void StopMovementComp() const;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	ATProjectile();
+
+	void StopMovementComp() const;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+protected:
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USphereComponent* SphereComp;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UProjectileMovementComponent* MovementComp;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UParticleSystemComponent* ParticleComp;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UParticleSystem* ImpactVFX;
+	
+	UFUNCTION()
+	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	
+	UFUNCTION()
+	void Explode();
+	
+	// virtual void PostInitializeComponents() override;
+	
 };

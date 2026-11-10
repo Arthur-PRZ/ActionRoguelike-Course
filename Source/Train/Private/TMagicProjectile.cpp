@@ -16,7 +16,6 @@ ATMagicProjectile::ATMagicProjectile()
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ATMagicProjectile::OnActorOverlap);
 	
 	MovementComp->InitialSpeed = 2000.0f;
-	MovementComp->ProjectileGravityScale = 0.0f;
 }
 
 void ATMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
