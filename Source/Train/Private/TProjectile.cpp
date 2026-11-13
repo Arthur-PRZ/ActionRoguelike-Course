@@ -22,8 +22,8 @@ ATProjectile::ATProjectile()
 	MovementComp->ProjectileGravityScale = 0.0f;
 	
 	
-	ParticleComp = CreateDefaultSubobject<UParticleSystemComponent>("ParticleComp");
-	ParticleComp->SetupAttachment(SphereComp);
+	EffectComp = CreateDefaultSubobject<UParticleSystemComponent>("ParticleComp");
+	EffectComp->SetupAttachment(SphereComp);
 }
 
 void ATProjectile::StopMovementComp() const

@@ -9,10 +9,7 @@
 // Sets default values
 ATMagicProjectile::ATMagicProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 	
-	SphereComp->SetCollisionProfileName("Projectile");
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ATMagicProjectile::OnActorOverlap);
 	
 	MovementComp->InitialSpeed = 2000.0f;
@@ -38,10 +35,4 @@ void ATMagicProjectile::BeginPlay()
 	
 }
 
-// Called every frame
-void ATMagicProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 

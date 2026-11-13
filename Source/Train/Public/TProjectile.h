@@ -30,7 +30,7 @@ protected:
 	UProjectileMovementComponent* MovementComp;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UParticleSystemComponent* ParticleComp;
+	UParticleSystemComponent* EffectComp;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	UParticleSystem* ImpactVFX;
@@ -39,7 +39,7 @@ protected:
 	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 	UFUNCTION()
-	void Explode();
+	virtual void Explode();
 	
 	// virtual void PostInitializeComponents() override;
 	

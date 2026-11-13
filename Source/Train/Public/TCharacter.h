@@ -36,8 +36,7 @@ protected:
 
 	FTimerHandle TimerHandle_PrimaryAttack;
 	FTimerHandle TimerHandle_Blackhole;
-	FTimerHandle Timerhandle_Dash;
-	// FTimerHandle Timerhandle_DashAnim;
+	FTimerHandle TimerHandle_Dash;
 	
 public:
 	// Sets default values for this character's properties
@@ -94,22 +93,14 @@ protected:
 	void Dash_TimeElapsed();
 	
 	UFUNCTION()
-	void DashStop_TimeElapsed(ATDash *Actor);
-	
-	UFUNCTION()
-	void DashTP_TimeElapsed(ATDash* Actor);
-	
-	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, UTAttributeComponent* OwningComp, float NewHealth, float Delta);
 	
 	void Move(const FInputActionValue& EventValue);
 	void Look(const FInputActionValue& EventValue);
 	
-	FTransform GetSpawnTM();
+	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
 	
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

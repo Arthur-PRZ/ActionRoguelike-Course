@@ -4,22 +4,15 @@
 #include "TDash.h"
 
 #include "TCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATDash::ATDash()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	
 	ProcParticleComp = CreateDefaultSubobject<UParticleSystemComponent>("ProcParticleComp");
 	ProcParticleComp->SetupAttachment(RootComponent);
 	
-	SphereComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	SphereComp->SetCollisionResponseToAllChannels(ECR_Block);
-	SphereComp->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
-	
-	MovementComp->InitialSpeed = 3000.0f;
-	MovementComp->ProjectileGravityScale = 0.0f;
+	MovementComp->InitialSpeed = 6000.0f;
 
 }
 
@@ -30,12 +23,35 @@ void ATDash::BeginPlay()
 	
 	ProcParticleComp->Deactivate();
 	SphereComp->IgnoreActorWhenMoving(GetInstigator(), true);
+	
+	GetWorldTimerManager().SetTimer(Timerhandle_Dash, this, &ATDash::Explode, 0.2f);
 }
 
-// Called every frame
-void ATDash::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
+void ATDash::Explode()
+{
+	GetWorldTimerManager().ClearTimer(Timerhandle_Dash);
+	
+	UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
+	
+	EffectComp->DeactivateSystem();
+	SetActorEnableCollision(false);
+	
+	StopMovementComp();
+	
+	ProcParticleComp->Activate();
+	
+	FTimerHandle TimerHandle_DelayedTeleport;
+	GetWorldTimerManager().SetTimer(TimerHandle_DelayedTeleport, this, &ATDash::TeleportInstigator, 0.2f);
+}
+
+void ATDash::TeleportInstigator()
+{
+	ATCharacter *Insti = Cast<ATCharacter>(GetInstigator());
+	if (Insti)
+	{
+		Insti->TeleportTo(GetActorLocation(), GetActorRotation(), false, false);
+		Destroy();
+	}
 }
 

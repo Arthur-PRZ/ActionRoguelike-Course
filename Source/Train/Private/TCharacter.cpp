@@ -16,9 +16,6 @@
 // Sets default values
 ATCharacter::ATCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	
 	ArmComp = CreateDefaultSubobject<USpringArmComponent>("ArmComp");
 	ArmComp->bUsePawnControlRotation = true; 
 	ArmComp->SetupAttachment(RootComponent);
@@ -71,16 +68,7 @@ void ATCharacter::PrimaryAttack()
 
 void ATCharacter::PrimaryAttack_TimeElapsed()
 {
-	if (ensureAlways(ProjectileClass))
-	{
-		FTransform SpawnTM = GetSpawnTM();
-
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Instigator = this;
-		
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
-	}
+	SpawnProjectile(ProjectileClass);
 }
 
 void ATCharacter::Blackhole()
@@ -92,51 +80,19 @@ void ATCharacter::Blackhole()
 
 void ATCharacter::Blackhole_TimeElapsed()
 {
-	FTransform SpawnTM = GetSpawnTM();
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Instigator = this;
-	
-	GetWorld()->SpawnActor<AActor>(BlackholeClass, SpawnTM, SpawnParams);
+	SpawnProjectile(BlackholeClass);
 }
 
 void ATCharacter::Dash()
 {
 	PlayAnimMontage(AttackAnim);
 	
-	GetWorldTimerManager().SetTimer(Timerhandle_Dash, this, &ATCharacter::Dash_TimeElapsed, 0.2f);
+	GetWorldTimerManager().SetTimer(TimerHandle_Dash, this, &ATCharacter::Dash_TimeElapsed, 0.2f);
 }
 
 void ATCharacter::Dash_TimeElapsed()
 {
-	FTransform SpawnTM = GetSpawnTM();
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Instigator = this;
-	
-	ATDash* SpawnedActor = GetWorld()->SpawnActor<ATDash>(DashClass, SpawnTM, SpawnParams);
-	
-	// SpawnedActor->GetMovementComp()->OnProjectileStop
-	
-	FTimerDelegate TimerDelegate;
-	TimerDelegate.BindUFunction(this, "DashStop_TimeElapsed", SpawnedActor);
-	
-	GetWorldTimerManager().SetTimer(Timerhandle_Dash, TimerDelegate, 0.2f, false);
-}
-
-void ATCharacter::DashStop_TimeElapsed(ATDash* Actor)
-{
-	Actor->StopMovementComp();
-	
-	FTimerDelegate TimerDelegate;
-	TimerDelegate.BindUFunction(this, "DashTP_TimeElapsed", Actor);
-	
-	Actor->ProcParticleComp->Activate();
-	GetWorldTimerManager().SetTimer(Timerhandle_Dash, TimerDelegate, 0.2f, false);
-}
-
-void ATCharacter::DashTP_TimeElapsed(ATDash* Actor)
-{
-	SetActorLocation(Actor->GetActorLocation());
-	Actor->Destroy();
+	SpawnProjectile(DashClass);
 }
 
 void ATCharacter::Jump()
@@ -163,47 +119,39 @@ void ATCharacter::Look(const FInputActionValue& EventValue)
 {
 	FVector2D MovementVector = EventValue.Get<FVector2D>();
 	
-	// if (GEngine)
-	// {
-	//  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Ma variable: %f"),  MovementVector.Y));
-	// 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Ma variable: %f"),  MovementVector.X));
-	// }
 	AddControllerYawInput(MovementVector.X);
 	AddControllerPitchInput(MovementVector.Y * 0.5f);
 }
-
-
 
 void ATCharacter::Interact()
 {
 	InteractComp->PrimaryInteract();
 }
 
-FTransform ATCharacter::GetSpawnTM()
+void ATCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 {
-	FHitResult Hit;
-	FVector Start = GetMesh()->GetSocketLocation("Muzzle_01");
-	FVector End = CameraComp->GetComponentLocation() + (CameraComp->GetForwardVector() * 10000.0f);
-	
-	FVector TargetPoint = End;
-	if (GetWorld()->LineTraceSingleByChannel(Hit, CameraComp->GetComponentLocation(), End, ECC_Visibility))
+	if (ensureAlways(ClassToSpawn))
 	{
-		TargetPoint = Hit.ImpactPoint;
+		FHitResult Hit;
+		FVector Start = GetMesh()->GetSocketLocation("Muzzle_01");
+		FVector End = CameraComp->GetComponentLocation() + (CameraComp->GetForwardVector() * 10000.0f);
+		
+		FVector TargetPoint = End;
+		if (GetWorld()->LineTraceSingleByChannel(Hit, CameraComp->GetComponentLocation(), End, ECC_Visibility))
+		{
+			TargetPoint = Hit.ImpactPoint;
+		}
+		
+		FRotator FinalRotation = UKismetMathLibrary::FindLookAtRotation(Start, TargetPoint);
+		FTransform SpawnTM(FinalRotation, Start);
+		
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Instigator = this;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		
+		
+		GetWorld()->SpawnActor<AActor>(ClassToSpawn, SpawnTM, SpawnParams);
 	}
-	
-	FRotator FinalRotation = UKismetMathLibrary::FindLookAtRotation(Start, TargetPoint);
-	FTransform SpawnTM(FinalRotation, Start);
-	
-	return SpawnTM;
-}
-
-
-
-// Called every frame
-void ATCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
