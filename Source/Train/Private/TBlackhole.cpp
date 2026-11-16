@@ -12,9 +12,6 @@
 // Sets default values
 ATBlackhole::ATBlackhole()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	
 	SphereComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereComp->SetCollisionResponseToAllChannels(ECR_Overlap);
 	SphereComp->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
@@ -58,13 +55,6 @@ void ATBlackhole::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAc
 	{
 		OtherActor->Destroy();
 	}
-}
-
-// Called every frame
-void ATBlackhole::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	
 }
 
 void ATBlackhole::DestroyTimer()

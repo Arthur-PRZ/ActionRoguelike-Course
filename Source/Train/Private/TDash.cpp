@@ -37,7 +37,7 @@ void ATDash::Explode()
 	EffectComp->DeactivateSystem();
 	SetActorEnableCollision(false);
 	
-	StopMovementComp();
+	StopMovementComp();	
 	
 	ProcParticleComp->Activate();
 	
