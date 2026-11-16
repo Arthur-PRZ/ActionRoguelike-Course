@@ -8,6 +8,11 @@ UTAttributeComponent::UTAttributeComponent() : Health(100)
 {
 }
 
+bool UTAttributeComponent::isAlive() const
+{
+	return Health > 0.0f;
+}
+
 
 void UTAttributeComponent::ApplyHealthChange(float Delta)
 {

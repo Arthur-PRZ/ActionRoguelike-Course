@@ -56,7 +56,11 @@ void ATCharacter::BeginPlay()
 
 void ATCharacter::OnHealthChanged(AActor* InstigatorActor, UTAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), NewHealth);
+	if (NewHealth <= 0.0f && Delta < 0.0f)
+	{
+		APlayerController *PC = Cast<APlayerController>(GetController());
+		DisableInput(PC);
+	}
 }
 
 void ATCharacter::PrimaryAttack()
