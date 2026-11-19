@@ -40,7 +40,6 @@ ATBlackhole::ATBlackhole()
 	
 }
 
-// Called when the game starts or when spawned
 void ATBlackhole::BeginPlay()
 {
 	Super::BeginPlay();
@@ -51,10 +50,16 @@ void ATBlackhole::BeginPlay()
 
 void ATBlackhole::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	UE_LOG(LogTemp, Warning, TEXT("A"));
 	if (!OtherActor->IsA(APawn::StaticClass()) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherActor->Destroy();
 	}
+}
+
+// Use OnOverlap to not stop the projectile when it hit an object
+void ATBlackhole::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
 }
 
 void ATBlackhole::DestroyTimer()
